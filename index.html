@@ -25,6 +25,10 @@
     <meta name="twitter:description" content="Explore the sweeping changes proposed by the OBBBA across key U.S. policy areas.">
     <meta name="twitter:image" content="https://kazuhani.github.io/BBB/images/obbba-social-preview.jpg"> <!-- Replace with an actual image URL -->
 
+    <!-- Favicon -->
+    <!-- Using an online favicon example (Wikipedia's favicon) -->
+    <link rel="icon" href="https://www.wikipedia.org/static/favicon/wikipedia.ico" type="image/x-icon" sizes="any">
+
     <!-- Chosen Palette: Calm Harmony -->
     <!-- Application Structure Plan: A thematic, single-page dashboard design is used to distill the complex legislative text into digestible, user-centric sections. Instead of following the bill's formal titles, the structure groups related policy changes (e.g., all immigration funding, all social safety net changes) together for better synthesis. The user flow is guided by a sticky top navigation bar, allowing non-linear exploration of high-impact areas like 'Immigration & Border Security', 'Taxation Overhaul', 'Healthcare & Social Safety Net', and 'Energy & Environment'. Key interactions include toggling data views on charts, and clicking on summary cards to reveal detailed explanations. This structure was chosen because a dense bill requires thematic organization and progressive disclosure of information to prevent user overload and facilitate understanding of cross-cutting policy shifts. -->
     <!-- Visualization & Content Choices: The application uses a mix of visualizations to achieve different communication goals, avoiding SVG and Mermaid.js. For large-scale financial data (e.g., multi-billion dollar appropriations for border security), grouped bar charts (Chart.js) are used to effectively compare magnitudes. For categorical breakdowns (e.g., new immigration fees), interactive HTML tables with sorting allow users to explore the data. For complex conceptual shifts (e.g., the new two-tiered federal employment system or the altered regulatory approval process), custom diagrams built with structured HTML and Tailwind CSS are used to visually explain the new processes. Textual analysis is presented in expandable cards to provide context without cluttering the initial view. This combination ensures that quantitative data is clearly visualized, and qualitative policy changes are explained in an organized, interactive manner. -->
@@ -450,6 +454,9 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // Scroll to top on page load/refresh
+    window.scrollTo(0, 0);
+
     // Chart.js Global Defaults for Dark Theme
     Chart.defaults.color = '#cbd5e1'; // slate-300 (general text color for charts)
     Chart.defaults.borderColor = '#475569'; // slate-600 (axis lines, etc.)
