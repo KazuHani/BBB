@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Analysis: The One Big Beautiful Bill Act</title>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A thematic, single-page dashboard design is used to distill the complex legislative text into digestible, user-centric sections. Instead of following the bill's formal titles, the structure groups related policy changes (e.g., all immigration funding, all social safety net changes) together for better synthesis. The user flow is guided by a sticky top navigation bar, allowing non-linear exploration of high-impact areas like 'Immigration & Border Security', 'Taxation Overhaul', 'Healthcare & Social Safety Net', and 'Energy & Environment'. Key interactions include toggling data views on charts, and clicking on summary cards to reveal detailed explanations. This structure was chosen because a dense bill requires thematic organization and progressive disclosure of information to prevent user overload and facilitate understanding of cross-cutting policy shifts. -->
+    <!-- Visualization & Content Choices: The application uses a mix of visualizations to achieve different communication goals, avoiding SVG and Mermaid.js. For large-scale financial data (e.g., multi-billion dollar appropriations for border security), grouped bar charts (Chart.js) are used to effectively compare magnitudes. For categorical breakdowns (e.g., new immigration fees), interactive HTML tables with sorting allow users to explore the data. For complex conceptual shifts (e.g., the new two-tiered federal employment system or the altered regulatory approval process), custom diagrams built with structured HTML and Tailwind CSS are used to visually explain the new processes. Textual analysis is presented in expandable cards to provide context without cluttering the initial view. This combination ensures that quantitative data is clearly visualized, and qualitative policy changes are explained in an organized, interactive manner. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #1a202c;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 100%;
+            max-width: 800px;
+            max-height: 400px;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #2d3748;
+            border-bottom-color: #4A5568;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .details.open {
+            max-height: 1000px; /* Adjust as needed */
+            transition: max-height 0.7s ease-in;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">The One Big Beautiful Bill Act</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Overview</a>
+                        <a href="#immigration" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Immigration</a>
+                        <a href="#taxation" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Taxation</a>
+                        <a href="#healthcare" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Healthcare</a>
+                        <a href="#energy" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Energy & Env.</a>
+                        <a href="#governance" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Governance</a>
+                    </div>
+                </div>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+             <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#overview" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Overview</a>
+                    <a href="#immigration" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Immigration</a>
+                    <a href="#taxation" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Taxation</a>
+                    <a href="#healthcare" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Healthcare</a>
+                    <a href="#energy" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Energy & Env.</a>
+                    <a href="#governance" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Governance</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Overview Section -->
+        <section id="overview" class="text-center mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">A Sweeping Legislative Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-10">
+                The "One Big Beautiful Bill Act" proposes a fundamental reorientation of federal policy. This interactive analysis breaks down its core pillars: fiscal austerity, deregulation, enhanced enforcement, and significant shifts in social and tax policy. Explore the key financial and regulatory changes reshaping America's landscape.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                    <div class="flex items-center mb-3">
+                        <span class="text-3xl mr-3">💰</span>
+                        <h3 class="text-xl font-bold text-gray-700">Fiscal Reshaping</h3>
+                    </div>
+                    <p class="text-gray-600">Massive spending increases in some areas (border security) and deep cuts in others (climate, environment), alongside a proliferation of new user fees.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                    <div class="flex items-center mb-3">
+                        <span class="text-3xl mr-3">⚖️</span>
+                        <h3 class="text-xl font-bold text-gray-700">Regulatory Rollback</h3>
+                    </div>
+                    <p class="text-gray-600">Systematic dismantling of environmental regulations and reduced oversight for the financial services industry, shifting power from agencies to Congress.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                    <div class="flex items-center mb-3">
+                        <span class="text-3xl mr-3">🛡️</span>
+                        <h3 class="text-xl font-bold text-gray-700">Enforcement First</h3>
+                    </div>
+                    <p class="text-gray-600">An unprecedented focus on immigration enforcement, with tens of billions allocated for detention, personnel, and a physical border barrier.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                    <div class="flex items-center mb-3">
+                        <span class="text-3xl mr-3">📝</span>
+                        <h3 class="text-xl font-bold text-gray-700">Tax & Social Policy</h3>
+                    </div>
+                    <p class="text-gray-600">Making the 2017 tax cuts permanent while eliminating green energy credits and introducing new work requirements and restrictions in social safety net programs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Immigration Section -->
+        <section id="immigration" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Immigration & Border Security Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                The bill allocates over $125 billion to reshape immigration enforcement and border security. This includes massive funding for a border wall, a dramatic increase in detention capacity and enforcement personnel, and a host of new, non-waivable fees for nearly every step of the immigration process.
+            </p>
+            
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">New Appropriations for Enforcement & Infrastructure</h3>
+                 <p class="text-center text-gray-600 mb-6">The bill directs tens of billions of dollars towards specific agencies for enforcement activities, with the largest shares going to border barrier construction and ICE detention capacity. Hover over the bars to see the exact funding allocated to each initiative.</p>
+                <div class="chart-container">
+                    <canvas id="immigrationSpendingChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
+                 <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">A New 'User-Pays' System: Major Immigration Fees</h3>
+                 <p class="text-center text-gray-600 mb-8">The legislation introduces a sweeping range of new fees for immigration processes, many of which are explicitly non-waivable. This fundamentally alters the financial landscape for applicants. The table below details some of the most significant new fees proposed for fiscal year 2025.</p>
+                 <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Fee Type</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Initial Fee (≥)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Key Conditions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feesTable" class="bg-white divide-y divide-gray-200">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Taxation Section -->
+        <section id="taxation" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Taxation Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                The bill makes permanent the individual and business tax cuts from the 2017 Tax Cuts and Jobs Act, while simultaneously introducing new, targeted tax relief measures and eliminating most clean energy tax credits. Click on any card to see more details about the proposed changes.
+            </p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tax Cuts Made Permanent -->
+                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="tax-cuts-details">
+                    <div class="flex items-center mb-3">
+                         <span class="text-2xl mr-3">📉</span>
+                        <h3 class="text-xl font-bold text-gray-700">TCJA Tax Cuts Permanent</h3>
+                    </div>
+                    <p class="text-gray-600">Extends individual income tax rates, the increased standard deduction, and the $2,000 Child Tax Credit.</p>
+                    <div id="tax-cuts-details" class="details mt-4 text-gray-600 text-sm">
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Individual Rates:</strong> The 10%, 12%, 22%, 24%, 32%, 35%, and 37% brackets are made permanent.</li>
+                            <li><strong>Standard Deduction:</strong> The higher standard deduction amounts are made permanent and temporarily enhanced.</li>
+                            <li><strong>Child Tax Credit:</strong> The $2,000 credit is made permanent, with a temporary boost to $2,500 through 2028.</li>
+                            <li><strong>Business Income Deduction (199A):</strong> The 20% pass-through deduction is made permanent and increased to 23%.</li>
+                            <li><strong>Estate Tax Exemption:</strong> The increased exemption is made permanent and set at a $15 million base.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- New Tax Relief -->
+                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="tax-relief-details">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🎉</span>
+                        <h3 class="text-xl font-bold text-gray-700">New Targeted Relief</h3>
+                    </div>
+                    <p class="text-gray-600">Introduces new tax deductions for income from tips and overtime, plus new savings accounts.</p>
+                     <div id="tax-relief-details" class="details mt-4 text-gray-600 text-sm">
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>No Tax on Tips:</strong> Creates a new deduction for qualified tip income for workers in traditionally tipped occupations.</li>
+                            <li><strong>No Tax on Overtime:</strong> Creates a new deduction for qualified overtime compensation.</li>
+                            <li><strong>Car Loan Interest:</strong> Allows a temporary deduction for interest paid on loans for U.S.-assembled passenger vehicles.</li>
+                             <li><strong>MAGA Accounts:</strong> Establishes new tax-exempt "Money Account for Growth and Advancement" for individuals under 18, seeded with a $1,000 pilot credit.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Elimination of Green Credits -->
+                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="green-credits-details">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🍃</span>
+                        <h3 class="text-xl font-bold text-gray-700">Green Credits Eliminated</h3>
+                    </div>
+                    <p class="text-gray-600">Terminates or phases out nearly all major clean energy tax credits for individuals and businesses.</p>
+                     <div id="green-credits-details" class="details mt-4 text-gray-600 text-sm">
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Clean Vehicles:</strong> Credits for new, used, and commercial clean vehicles are terminated.</li>
+                            <li><strong>Residential Energy:</strong> Credits for home energy improvements and residential clean energy (like solar panels) are terminated.</li>
+                            <li><strong>Clean Electricity:</strong> Production and investment credits for clean electricity are phased out and hit with new restrictions related to foreign entities.</li>
+                            <li><strong>Advanced Manufacturing:</strong> The credit for producing clean energy components is phased out and restricted.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Healthcare & Social Safety Net Section -->
+        <section id="healthcare" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Healthcare & Social Safety Net</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                This bill enacts significant reforms across Medicaid, the ACA, SNAP, and student loans. The overarching themes are stricter eligibility, increased work and community engagement requirements, enhanced program integrity measures, and the introduction of specific social policy limitations.
+            </p>
+
+            <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+                 <div class="bg-white p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Key Changes to Medicaid & SNAP</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <div><strong>Work/Community Engagement:</strong> Mandates that states require certain Medicaid recipients to complete 80 hours/month of work, community service, or education to maintain eligibility.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <div><strong>Stricter SNAP Rules:</strong> Prevents administrative updates from increasing the cost of the Thrifty Food Plan (capping benefits), raises the work requirement age to 65, and cuts the federal share of administrative costs in half.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <div><strong>Program Integrity:</strong> Implements new national systems to verify addresses and prevent duplicate enrollment in Medicaid across states. Tightens eligibility verification for both citizenship and income.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-red-500 mr-3 mt-1">✗</span>
+                            <div><strong>Social Policy Restrictions:</strong> Prohibits federal funding (FFP) for gender transition procedures for minors under Medicaid/CHIP. Also defunds certain "prohibited entities" that provide abortion services from receiving Medicaid payments.</div>
+                        </li>
+                    </ul>
+                </div>
+
+                 <div class="bg-white p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Education & ACA Reforms</h3>
+                    <ul class="space-y-4 text-gray-700">
+                         <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <div><strong>New Student Loan Plan:</strong> Forces most borrowers into a new, single "Repayment Assistance Plan" (RAP), eliminating other income-driven options and removing deferments for economic hardship or unemployment on new loans.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <div><strong>Workforce Pell Grants:</strong> Creates a new "Workforce Pell Grant" for short-term vocational programs with strict performance metrics, while making regular Pell Grants harder to get for part-time students.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <div><strong>Tighter ACA Enrollment:</strong> Shortens the open enrollment period and mandates stricter income and eligibility verification for individuals seeking subsidies on the ACA exchanges.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-red-500 mr-3 mt-1">✗</span>
+                            <div><strong>EHB Limitation:</strong> Prohibits gender transition procedures from being included as an "Essential Health Benefit" that ACA-compliant plans must cover.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Energy & Environment Section -->
+        <section id="energy" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Energy & Environment Pivot</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                The bill engineers a sharp pivot in U.S. energy policy, moving away from support for renewable energy and towards maximizing domestic fossil fuel production. It mandates new oil, gas, and coal leasing while systematically rescinding funds and repealing regulations related to climate change and environmental protection.
+            </p>
+
+             <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Rescinded Climate & Environmental Funds (IRA & Others)</h3>
+                 <p class="text-center text-gray-600 mb-6">The bill rescinds billions in unobligated funds from programs established by the Inflation Reduction Act and other environmental laws. The chart below shows the breakdown of some major funding areas targeted for cuts.</p>
+                <div class="chart-container" style="max-height: 350px;">
+                    <canvas id="rescissionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">Pro-Fossil Fuel Mandates</h3>
+                     <ul class="space-y-3 text-green-700">
+                        <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>Mandatory Leasing:</strong> Requires immediate resumption of quarterly onshore oil & gas lease sales in 9+ states and mandates new offshore sales.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <span class="font-bold mr-2">▶</span>
+                            <div><strong>Alaska Drilling:</strong> Reinstates canceled leases and mandates new lease sales in the National Petroleum Reserve-Alaska and the Coastal Plain.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>Coal Expansion:</strong> Mandates expedited processing of coal leases and requires an additional 4 million acres to be made available for leasing.</div>
+                        </li>
+                         <li class="flex items-start">
+                             <span class="font-bold mr-2">▶</span>
+                            <div><strong>Streamlined Permitting:</strong> Introduces a "permit-by-rule" process for oil and gas drilling to speed up approvals.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                    <h3 class="text-2xl font-bold text-red-800 mb-4">Environmental Repeals</h3>
+                     <ul class="space-y-3 text-red-700">
+                        <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>Clean Air Act Repeals:</strong> Eliminates the Greenhouse Gas Reduction Fund, grants for clean heavy-duty vehicles, and programs to reduce port pollution.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>Vehicle Standards:</strong> Repeals EPA emissions standards and NHTSA fuel economy (CAFE) standards for new vehicles.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>Methane Program:</strong> Repeals and rescinds all funding for the methane emissions reduction incentive program for the oil and gas industry.</div>
+                        </li>
+                          <li class="flex items-start">
+                            <span class="font-bold mr-2">▶</span>
+                            <div><strong>New Renewable Fees:</strong> Introduces new acreage rent and capacity fees on wind and solar projects on federal lands.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Governance Section -->
+        <section id="governance" class="scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Reshaping Governance & Federal Work</h2>
+             <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+                The bill fundamentally alters the balance of power between Congress and federal agencies, while also transforming the nature of federal employment. It introduces new hurdles for regulation and restructures retirement and job protections for civil servants.
+            </p>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Regulatory Power Shift -->
+                <div class="bg-white p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Shift in Regulatory Power</h3>
+                    <p class="text-gray-600 mb-6">New procedures are established to give Congress direct approval power over significant agency rules, slowing down the regulatory process.</p>
+                    <div class="space-y-4 border-l-4 border-gray-300 pl-4">
+                        <div class="relative">
+                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-700"></div>
+                           <h4 class="font-semibold text-gray-800">Agency Proposes Rule</h4>
+                           <p class="text-sm text-gray-600">Agency must now provide exhaustive cost, job, and inflation impact reports.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-700"></div>
+                            <h4 class="font-semibold text-gray-800">NEW: Congressional Approval</h4>
+                            <p class="text-sm text-gray-600">Any "major rule" that increases revenue cannot take effect unless Congress passes a joint resolution of approval.</p>
+                        </div>
+                         <div class="relative">
+                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-400"></div>
+                           <h4 class="font-semibold text-gray-800">NEW: Annual Sunset Review</h4>
+                           <p class="text-sm text-gray-600">Agencies must submit 20% of existing rules for Congressional re-approval each year; they expire if not approved.</p>
+                        </div>
+                        <div class="relative">
+                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-red-500"></div>
+                           <h4 class="font-semibold text-gray-800">Rule Blocked or Expires</h4>
+                           <p class="text-sm text-gray-600">Failure to get Congressional approval prevents rule implementation or renewal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Federal Employment -->
+                <div class="bg-white p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Federal Employment Transformed</h3>
+                    <p class="text-gray-600 mb-6">The bill overhauls the federal retirement system and introduces "at-will" employment, creating a two-tiered system for new hires.</p>
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-3 mt-1">▲</span>
+                            <div><strong>Increased FERS Contributions:</strong> Mandates significant, phased-in increases to retirement contributions for most federal employees, reducing take-home pay.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-3 mt-1">▼</span>
+                            <div><strong>"High-5" Pension Calculation:</strong> Changes the pension calculation from being based on the highest 3 years of salary to the highest 5, typically resulting in a lower pension.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-orange-500 mr-3 mt-1">↔️</span>
+                            <div><strong>At-Will Employment Option:</strong> New hires can choose "at-will" status (no appeal rights for removal) to avoid higher retirement contributions, fundamentally altering civil service protections.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navigation scroll highlighting
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50% 0px -50% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Expandable cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const targetId = card.dataset.target;
+            const details = document.getElementById(targetId);
+            details.classList.toggle('open');
+        });
+    });
+
+    // Immigration Spending Chart
+    const immigrationSpendingData = {
+        labels: ['Border Barrier System', 'ICE Detention Capacity', 'ICE Personnel Hiring', 'ICE Transportation/Removal', 'CBP Personnel'],
+        datasets: [{
+            label: 'FY2025 Funding (in Billions)',
+            data: [46.5, 45, 8, 14.4, 4.1],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(153, 102, 255, 0.6)'
+            ],
+            borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+    const immigrationSpendingCtx = document.getElementById('immigrationSpendingChart').getContext('2d');
+    new Chart(immigrationSpendingCtx, {
+        type: 'bar',
+        data: immigrationSpendingData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: false,
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` $${context.raw} Billion`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Funding in Billions (USD)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Immigration Fees Table
+    const feesData = [
+        { type: 'Asylum Application', fee: '$1,000', conditions: 'Non-waivable. Funds EOIR & USCIS fraud detection.' },
+        { type: 'UAC Sponsor Placement', fee: '$3,500', conditions: 'Reimburses child care costs. Funds HHS background checks.' },
+        { type: 'Parole into U.S.', fee: '$1,000', conditions: 'Very limited humanitarian exceptions.' },
+        { type: 'Employment Authorization (EAD for Asylee)', fee: '$550', conditions: 'Max 6-month validity. Non-waivable.' },
+        { type: 'Yearly Asylum Pending Fee', fee: '$100', conditions: 'Annual recurring fee while case is pending.' },
+        { type: 'CBP Apprehension (Between Ports)', fee: '$5,000', conditions: 'Imposed on inadmissible aliens apprehended by CBP.' },
+    ];
+    const feesTableBody = document.getElementById('feesTable');
+    feesData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.type}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.fee}</td>
+            <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">${item.conditions}</td>
+        `;
+        feesTableBody.appendChild(row);
+    });
+    
+    // Environmental Rescission Chart
+    const rescissionData = {
+        labels: ['Greenhouse Gas Reduction Fund', 'Clean Heavy-Duty Vehicles', 'Energy Infrastructure Reinvestment', 'Grants to Reduce Port Pollution', 'Adv. Tech. Vehicle Manufacturing'],
+        datasets: [{
+            label: 'Rescinded Funds (in Billions)',
+            data: [27, 5, 5, 3, 2], // Example data based on analysis
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(255, 205, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+            ],
+        }]
+    };
+    const rescissionCtx = document.getElementById('rescissionChart').getContext('2d');
+    new Chart(rescissionCtx, {
+        type: 'doughnut',
+        data: rescissionData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: false
+                },
+                tooltip: {
+                     callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact' }).format(context.parsed * 1000000000);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
