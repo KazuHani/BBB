@@ -3,7 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Analysis: The One Big Beautiful Bill Act</title>
+    <title>Interactive Analysis: The One Big Beautiful Bill Act (OBBBA)</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore an in-depth interactive analysis of the 'One Big Beautiful Bill Act' (OBBBA), detailing its sweeping impacts on immigration, taxation, healthcare, energy, environment, and governance. Understand key financial and regulatory changes.">
+    <meta name="keywords" content="OBBBA, One Big Beautiful Bill Act, legislative analysis, federal policy, immigration reform, tax cuts, healthcare policy, energy policy, environmental regulation, governance changes, US legislation">
+    <link rel="canonical" href="https://kazuhani.github.io/BBB/">
+
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kazuhani.github.io/BBB/">
+    <meta property="og:title" content="Interactive Analysis: The One Big Beautiful Bill Act (OBBBA)">
+    <meta property="og:description" content="In-depth analysis of the OBBBA's impacts on immigration, taxation, healthcare, energy, environment, and governance.">
+    <meta property="og:image" content="https://kazuhani.github.io/BBB/images/obbba-social-preview.jpg"> <!-- Replace with an actual image URL (e.g., 1200x630px) -->
+    <meta property="og:site_name" content="OBBBA Interactive Analysis">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://kazuhani.github.io/BBB/">
+    <meta name="twitter:title" content="Interactive Analysis: The One Big Beautiful Bill Act (OBBBA)">
+    <meta name="twitter:description" content="Explore the sweeping changes proposed by the OBBBA across key U.S. policy areas.">
+    <meta name="twitter:image" content="https://kazuhani.github.io/BBB/images/obbba-social-preview.jpg"> <!-- Replace with an actual image URL -->
+
     <!-- Chosen Palette: Calm Harmony -->
     <!-- Application Structure Plan: A thematic, single-page dashboard design is used to distill the complex legislative text into digestible, user-centric sections. Instead of following the bill's formal titles, the structure groups related policy changes (e.g., all immigration funding, all social safety net changes) together for better synthesis. The user flow is guided by a sticky top navigation bar, allowing non-linear exploration of high-impact areas like 'Immigration & Border Security', 'Taxation Overhaul', 'Healthcare & Social Safety Net', and 'Energy & Environment'. Key interactions include toggling data views on charts, and clicking on summary cards to reveal detailed explanations. This structure was chosen because a dense bill requires thematic organization and progressive disclosure of information to prevent user overload and facilitate understanding of cross-cutting policy shifts. -->
     <!-- Visualization & Content Choices: The application uses a mix of visualizations to achieve different communication goals, avoiding SVG and Mermaid.js. For large-scale financial data (e.g., multi-billion dollar appropriations for border security), grouped bar charts (Chart.js) are used to effectively compare magnitudes. For categorical breakdowns (e.g., new immigration fees), interactive HTML tables with sorting allow users to explore the data. For complex conceptual shifts (e.g., the new two-tiered federal employment system or the altered regulatory approval process), custom diagrams built with structured HTML and Tailwind CSS are used to visually explain the new processes. Textual analysis is presented in expandable cards to provide context without cluttering the initial view. This combination ensures that quantitative data is clearly visualized, and qualitative policy changes are explained in an organized, interactive manner. -->
@@ -14,8 +35,16 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8F7F4;
-            color: #1a202c;
+            /* Dark theme gradient background */
+            background: linear-gradient(-45deg, #0F172A, #111827, #1F2937, #172031);
+            background-size: 400% 400%;
+            animation: gradientBG 30s ease infinite;
+            color: #d1d5db; /* Tailwind gray-300 */
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .chart-container {
             position: relative;
@@ -29,15 +58,15 @@
             transition: color 0.3s ease, border-bottom-color 0.3s ease;
         }
         .nav-link.active, .nav-link:hover {
-            color: #2d3748;
-            border-bottom-color: #4A5568;
+            color: #ffffff; /* White */
+            border-bottom-color: #4f46e5; /* Indigo-600 for accent */
         }
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 6px 6px rgba(0,0,0,0.35); /* Darker shadow for dark theme */
         }
         .details {
             max-height: 0;
@@ -53,24 +82,24 @@
 <body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header id="header" class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <header id="header" class="bg-slate-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-800">The One Big Beautiful Bill Act</h1>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-100">The One Big Beautiful Bill Act</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#overview" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Overview</a>
-                        <a href="#immigration" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Immigration</a>
-                        <a href="#taxation" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Taxation</a>
-                        <a href="#healthcare" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Healthcare</a>
-                        <a href="#energy" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Energy & Env.</a>
-                        <a href="#governance" class="nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Governance</a>
+                        <a href="#overview" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Overview</a>
+                        <a href="#immigration" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Immigration</a>
+                        <a href="#taxation" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Taxation</a>
+                        <a href="#healthcare" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Healthcare</a>
+                        <a href="#energy" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Energy & Env.</a>
+                        <a href="#governance" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Governance</a>
                     </div>
                 </div>
                  <div class="md:hidden">
-                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                         <span class="sr-only">Open main menu</span>
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -80,12 +109,12 @@
             </div>
              <div id="mobile-menu" class="md:hidden hidden">
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <a href="#overview" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Overview</a>
-                    <a href="#immigration" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Immigration</a>
-                    <a href="#taxation" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Taxation</a>
-                    <a href="#healthcare" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Healthcare</a>
-                    <a href="#energy" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Energy & Env.</a>
-                    <a href="#governance" class="block nav-link text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Governance</a>
+                    <a href="#overview" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Overview</a>
+                    <a href="#immigration" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Immigration</a>
+                    <a href="#taxation" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Taxation</a>
+                    <a href="#healthcare" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Healthcare</a>
+                    <a href="#energy" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Energy & Env.</a>
+                    <a href="#governance" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium border-b-2 border-transparent">Governance</a>
                 </div>
             </div>
         </nav>
@@ -95,70 +124,70 @@
 
         <!-- Overview Section -->
         <section id="overview" class="text-center mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">A Sweeping Legislative Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">A Sweeping Legislative Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-400 mb-10">
                 The "One Big Beautiful Bill Act" proposes a fundamental reorientation of federal policy. This interactive analysis breaks down its core pillars: fiscal austerity, deregulation, enhanced enforcement, and significant shifts in social and tax policy. Explore the key financial and regulatory changes reshaping America's landscape.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">💰</span>
-                        <h3 class="text-xl font-bold text-gray-700">Fiscal Reshaping</h3>
+                        <h3 class="text-xl font-bold text-gray-200">Fiscal Reshaping</h3>
                     </div>
-                    <p class="text-gray-600">Massive spending increases in some areas (border security) and deep cuts in others (climate, environment), alongside a proliferation of new user fees.</p>
+                    <p class="text-gray-400">Massive spending increases in some areas (border security) and deep cuts in others (climate, environment), alongside a proliferation of new user fees.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">⚖️</span>
-                        <h3 class="text-xl font-bold text-gray-700">Regulatory Rollback</h3>
+                        <h3 class="text-xl font-bold text-gray-200">Regulatory Rollback</h3>
                     </div>
-                    <p class="text-gray-600">Systematic dismantling of environmental regulations and reduced oversight for the financial services industry, shifting power from agencies to Congress.</p>
+                    <p class="text-gray-400">Systematic dismantling of environmental regulations and reduced oversight for the financial services industry, shifting power from agencies to Congress.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">🛡️</span>
-                        <h3 class="text-xl font-bold text-gray-700">Enforcement First</h3>
+                        <h3 class="text-xl font-bold text-gray-200">Enforcement First</h3>
                     </div>
-                    <p class="text-gray-600">An unprecedented focus on immigration enforcement, with tens of billions allocated for detention, personnel, and a physical border barrier.</p>
+                    <p class="text-gray-400">An unprecedented focus on immigration enforcement, with tens of billions allocated for detention, personnel, and a physical border barrier.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">📝</span>
-                        <h3 class="text-xl font-bold text-gray-700">Tax & Social Policy</h3>
+                        <h3 class="text-xl font-bold text-gray-200">Tax & Social Policy</h3>
                     </div>
-                    <p class="text-gray-600">Making the 2017 tax cuts permanent while eliminating green energy credits and introducing new work requirements and restrictions in social safety net programs.</p>
+                    <p class="text-gray-400">Making the 2017 tax cuts permanent while eliminating green energy credits and introducing new work requirements and restrictions in social safety net programs.</p>
                 </div>
             </div>
         </section>
 
         <!-- Immigration Section -->
         <section id="immigration" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Immigration & Border Security Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Immigration & Border Security Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
                 The bill allocates over $125 billion to reshape immigration enforcement and border security. This includes massive funding for a border wall, a dramatic increase in detention capacity and enforcement personnel, and a host of new, non-waivable fees for nearly every step of the immigration process.
             </p>
             
-            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-12">
-                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">New Appropriations for Enforcement & Infrastructure</h3>
-                 <p class="text-center text-gray-600 mb-6">The bill directs tens of billions of dollars towards specific agencies for enforcement activities, with the largest shares going to border barrier construction and ICE detention capacity. Hover over the bars to see the exact funding allocated to each initiative.</p>
+            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12">
+                <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">New Appropriations for Enforcement & Infrastructure</h3>
+                 <p class="text-center text-gray-400 mb-6">The bill directs tens of billions of dollars towards specific agencies for enforcement activities, with the largest shares going to border barrier construction and ICE detention capacity. Hover over the bars to see the exact funding allocated to each initiative.</p>
                 <div class="chart-container">
                     <canvas id="immigrationSpendingChart"></canvas>
                 </div>
             </div>
             
-            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
-                 <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">A New 'User-Pays' System: Major Immigration Fees</h3>
-                 <p class="text-center text-gray-600 mb-8">The legislation introduces a sweeping range of new fees for immigration processes, many of which are explicitly non-waivable. This fundamentally alters the financial landscape for applicants. The table below details some of the most significant new fees proposed for fiscal year 2025.</p>
+            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl">
+                 <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">A New 'User-Pays' System: Major Immigration Fees</h3>
+                 <p class="text-center text-gray-400 mb-8">The legislation introduces a sweeping range of new fees for immigration processes, many of which are explicitly non-waivable. This fundamentally alters the financial landscape for applicants. The table below details some of the most significant new fees proposed for fiscal year 2025.</p>
                  <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-100">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Fee Type</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Initial Fee (≥)</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Key Conditions</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Fee Type</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Initial Fee (≥)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Key Conditions</th>
                             </tr>
                         </thead>
-                        <tbody id="feesTable" class="bg-white divide-y divide-gray-200">
+                        <tbody id="feesTable" class="bg-gray-800 divide-y divide-gray-700">
                             <!-- JS will populate this -->
                         </tbody>
                     </table>
@@ -168,20 +197,20 @@
 
         <!-- Taxation Section -->
         <section id="taxation" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Taxation Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Taxation Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
                 The bill makes permanent the individual and business tax cuts from the 2017 Tax Cuts and Jobs Act, while simultaneously introducing new, targeted tax relief measures and eliminating most clean energy tax credits. Click on any card to see more details about the proposed changes.
             </p>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Tax Cuts Made Permanent -->
-                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="tax-cuts-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="tax-cuts-details">
                     <div class="flex items-center mb-3">
                          <span class="text-2xl mr-3">📉</span>
-                        <h3 class="text-xl font-bold text-gray-700">TCJA Tax Cuts Permanent</h3>
+                        <h3 class="text-xl font-bold text-gray-200">TCJA Tax Cuts Permanent</h3>
                     </div>
-                    <p class="text-gray-600">Extends individual income tax rates, the increased standard deduction, and the $2,000 Child Tax Credit.</p>
-                    <div id="tax-cuts-details" class="details mt-4 text-gray-600 text-sm">
+                    <p class="text-gray-400">Extends individual income tax rates, the increased standard deduction, and the $2,000 Child Tax Credit.</p>
+                    <div id="tax-cuts-details" class="details mt-4 text-gray-400 text-sm">
                         <ul class="list-disc list-inside space-y-2">
                             <li><strong>Individual Rates:</strong> The 10%, 12%, 22%, 24%, 32%, 35%, and 37% brackets are made permanent.</li>
                             <li><strong>Standard Deduction:</strong> The higher standard deduction amounts are made permanent and temporarily enhanced.</li>
@@ -193,13 +222,13 @@
                 </div>
 
                 <!-- New Tax Relief -->
-                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="tax-relief-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="tax-relief-details">
                     <div class="flex items-center mb-3">
                         <span class="text-2xl mr-3">🎉</span>
-                        <h3 class="text-xl font-bold text-gray-700">New Targeted Relief</h3>
+                        <h3 class="text-xl font-bold text-gray-200">New Targeted Relief</h3>
                     </div>
-                    <p class="text-gray-600">Introduces new tax deductions for income from tips and overtime, plus new savings accounts.</p>
-                     <div id="tax-relief-details" class="details mt-4 text-gray-600 text-sm">
+                    <p class="text-gray-400">Introduces new tax deductions for income from tips and overtime, plus new savings accounts.</p>
+                     <div id="tax-relief-details" class="details mt-4 text-gray-400 text-sm">
                         <ul class="list-disc list-inside space-y-2">
                             <li><strong>No Tax on Tips:</strong> Creates a new deduction for qualified tip income for workers in traditionally tipped occupations.</li>
                             <li><strong>No Tax on Overtime:</strong> Creates a new deduction for qualified overtime compensation.</li>
@@ -210,13 +239,13 @@
                 </div>
                 
                 <!-- Elimination of Green Credits -->
-                <div class="card bg-white p-6 rounded-lg shadow-lg cursor-pointer" data-target="green-credits-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="green-credits-details">
                     <div class="flex items-center mb-3">
                         <span class="text-2xl mr-3">🍃</span>
-                        <h3 class="text-xl font-bold text-gray-700">Green Credits Eliminated</h3>
+                        <h3 class="text-xl font-bold text-gray-200">Green Credits Eliminated</h3>
                     </div>
-                    <p class="text-gray-600">Terminates or phases out nearly all major clean energy tax credits for individuals and businesses.</p>
-                     <div id="green-credits-details" class="details mt-4 text-gray-600 text-sm">
+                    <p class="text-gray-400">Terminates or phases out nearly all major clean energy tax credits for individuals and businesses.</p>
+                     <div id="green-credits-details" class="details mt-4 text-gray-400 text-sm">
                         <ul class="list-disc list-inside space-y-2">
                             <li><strong>Clean Vehicles:</strong> Credits for new, used, and commercial clean vehicles are terminated.</li>
                             <li><strong>Residential Energy:</strong> Credits for home energy improvements and residential clean energy (like solar panels) are terminated.</li>
@@ -230,51 +259,51 @@
         
         <!-- Healthcare & Social Safety Net Section -->
         <section id="healthcare" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Healthcare & Social Safety Net</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Healthcare & Social Safety Net</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
                 This bill enacts significant reforms across Medicaid, the ACA, SNAP, and student loans. The overarching themes are stricter eligibility, increased work and community engagement requirements, enhanced program integrity measures, and the introduction of specific social policy limitations.
             </p>
 
             <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
-                 <div class="bg-white p-6 rounded-lg shadow-xl">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Key Changes to Medicaid & SNAP</h3>
-                    <ul class="space-y-4 text-gray-700">
+                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                    <h3 class="text-2xl font-bold text-gray-100 mb-4">Key Changes to Medicaid & SNAP</h3>
+                    <ul class="space-y-4 text-gray-300">
                         <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <span class="text-green-400 mr-3 mt-1">✓</span>
                             <div><strong>Work/Community Engagement:</strong> Mandates that states require certain Medicaid recipients to complete 80 hours/month of work, community service, or education to maintain eligibility.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <span class="text-green-400 mr-3 mt-1">✓</span>
                             <div><strong>Stricter SNAP Rules:</strong> Prevents administrative updates from increasing the cost of the Thrifty Food Plan (capping benefits), raises the work requirement age to 65, and cuts the federal share of administrative costs in half.</div>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 mr-3 mt-1">✓</span>
+                            <span class="text-green-400 mr-3 mt-1">✓</span>
                             <div><strong>Program Integrity:</strong> Implements new national systems to verify addresses and prevent duplicate enrollment in Medicaid across states. Tightens eligibility verification for both citizenship and income.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-red-500 mr-3 mt-1">✗</span>
+                            <span class="text-red-400 mr-3 mt-1">✗</span>
                             <div><strong>Social Policy Restrictions:</strong> Prohibits federal funding (FFP) for gender transition procedures for minors under Medicaid/CHIP. Also defunds certain "prohibited entities" that provide abortion services from receiving Medicaid payments.</div>
                         </li>
                     </ul>
                 </div>
 
-                 <div class="bg-white p-6 rounded-lg shadow-xl">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Education & ACA Reforms</h3>
-                    <ul class="space-y-4 text-gray-700">
+                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                    <h3 class="text-2xl font-bold text-gray-100 mb-4">Education & ACA Reforms</h3>
+                    <ul class="space-y-4 text-gray-300">
                          <li class="flex items-start">
-                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <span class="text-blue-400 mr-3 mt-1">➔</span>
                             <div><strong>New Student Loan Plan:</strong> Forces most borrowers into a new, single "Repayment Assistance Plan" (RAP), eliminating other income-driven options and removing deferments for economic hardship or unemployment on new loans.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <span class="text-blue-400 mr-3 mt-1">➔</span>
                             <div><strong>Workforce Pell Grants:</strong> Creates a new "Workforce Pell Grant" for short-term vocational programs with strict performance metrics, while making regular Pell Grants harder to get for part-time students.</div>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-blue-500 mr-3 mt-1">➔</span>
+                            <span class="text-blue-400 mr-3 mt-1">➔</span>
                             <div><strong>Tighter ACA Enrollment:</strong> Shortens the open enrollment period and mandates stricter income and eligibility verification for individuals seeking subsidies on the ACA exchanges.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-red-500 mr-3 mt-1">✗</span>
+                            <span class="text-red-400 mr-3 mt-1">✗</span>
                             <div><strong>EHB Limitation:</strong> Prohibits gender transition procedures from being included as an "Essential Health Benefit" that ACA-compliant plans must cover.</div>
                         </li>
                     </ul>
@@ -284,23 +313,23 @@
 
         <!-- Energy & Environment Section -->
         <section id="energy" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Energy & Environment Pivot</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Energy & Environment Pivot</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
                 The bill engineers a sharp pivot in U.S. energy policy, moving away from support for renewable energy and towards maximizing domestic fossil fuel production. It mandates new oil, gas, and coal leasing while systematically rescinding funds and repealing regulations related to climate change and environmental protection.
             </p>
 
-             <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl mb-12">
-                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Rescinded Climate & Environmental Funds (IRA & Others)</h3>
-                 <p class="text-center text-gray-600 mb-6">The bill rescinds billions in unobligated funds from programs established by the Inflation Reduction Act and other environmental laws. The chart below shows the breakdown of some major funding areas targeted for cuts.</p>
+             <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12">
+                <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">Rescinded Climate & Environmental Funds (IRA & Others)</h3>
+                 <p class="text-center text-gray-400 mb-6">The bill rescinds billions in unobligated funds from programs established by the Inflation Reduction Act and other environmental laws. The chart below shows the breakdown of some major funding areas targeted for cuts.</p>
                 <div class="chart-container" style="max-height: 350px;">
                     <canvas id="rescissionChart"></canvas>
                 </div>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-8">
-                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                    <h3 class="text-2xl font-bold text-green-800 mb-4">Pro-Fossil Fuel Mandates</h3>
-                     <ul class="space-y-3 text-green-700">
+                <div class="bg-gray-800 p-6 rounded-lg border border-green-600 shadow-2xl">
+                    <h3 class="text-2xl font-bold text-green-400 mb-4">Pro-Fossil Fuel Mandates</h3>
+                     <ul class="space-y-3 text-green-500">
                         <li class="flex items-start">
                             <span class="font-bold mr-2">▶</span>
                             <div><strong>Mandatory Leasing:</strong> Requires immediate resumption of quarterly onshore oil & gas lease sales in 9+ states and mandates new offshore sales.</div>
@@ -319,9 +348,9 @@
                         </li>
                     </ul>
                 </div>
-                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
-                    <h3 class="text-2xl font-bold text-red-800 mb-4">Environmental Repeals</h3>
-                     <ul class="space-y-3 text-red-700">
+                <div class="bg-gray-800 p-6 rounded-lg border border-red-600 shadow-2xl">
+                    <h3 class="text-2xl font-bold text-red-400 mb-4">Environmental Repeals</h3>
+                     <ul class="space-y-3 text-red-500">
                         <li class="flex items-start">
                             <span class="font-bold mr-2">▶</span>
                             <div><strong>Clean Air Act Repeals:</strong> Eliminates the Greenhouse Gas Reduction Fund, grants for clean heavy-duty vehicles, and programs to reduce port pollution.</div>
@@ -345,55 +374,55 @@
 
         <!-- Governance Section -->
         <section id="governance" class="scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Reshaping Governance & Federal Work</h2>
-             <p class="max-w-3xl mx-auto text-center text-lg text-gray-600 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Reshaping Governance & Federal Work</h2>
+             <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
                 The bill fundamentally alters the balance of power between Congress and federal agencies, while also transforming the nature of federal employment. It introduces new hurdles for regulation and restructures retirement and job protections for civil servants.
             </p>
 
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Regulatory Power Shift -->
-                <div class="bg-white p-6 rounded-lg shadow-xl">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Shift in Regulatory Power</h3>
-                    <p class="text-gray-600 mb-6">New procedures are established to give Congress direct approval power over significant agency rules, slowing down the regulatory process.</p>
-                    <div class="space-y-4 border-l-4 border-gray-300 pl-4">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                    <h3 class="text-2xl font-bold text-gray-100 mb-4">Shift in Regulatory Power</h3>
+                    <p class="text-gray-400 mb-6">New procedures are established to give Congress direct approval power over significant agency rules, slowing down the regulatory process.</p>
+                    <div class="space-y-4 border-l-4 border-gray-600 pl-4">
                         <div class="relative">
-                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-700"></div>
-                           <h4 class="font-semibold text-gray-800">Agency Proposes Rule</h4>
-                           <p class="text-sm text-gray-600">Agency must now provide exhaustive cost, job, and inflation impact reports.</p>
+                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-500"></div>
+                           <h4 class="font-semibold text-gray-200">Agency Proposes Rule</h4>
+                           <p class="text-sm text-gray-400">Agency must now provide exhaustive cost, job, and inflation impact reports.</p>
                         </div>
                         <div class="relative">
-                            <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-700"></div>
-                            <h4 class="font-semibold text-gray-800">NEW: Congressional Approval</h4>
-                            <p class="text-sm text-gray-600">Any "major rule" that increases revenue cannot take effect unless Congress passes a joint resolution of approval.</p>
+                            <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-sky-500"></div>
+                            <h4 class="font-semibold text-gray-200">NEW: Congressional Approval</h4>
+                            <p class="text-sm text-gray-400">Any "major rule" that increases revenue cannot take effect unless Congress passes a joint resolution of approval.</p>
                         </div>
                          <div class="relative">
-                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-gray-400"></div>
-                           <h4 class="font-semibold text-gray-800">NEW: Annual Sunset Review</h4>
-                           <p class="text-sm text-gray-600">Agencies must submit 20% of existing rules for Congressional re-approval each year; they expire if not approved.</p>
+                           <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-sky-500"></div>
+                           <h4 class="font-semibold text-gray-200">NEW: Annual Sunset Review</h4>
+                           <p class="text-sm text-gray-400">Agencies must submit 20% of existing rules for Congressional re-approval each year; they expire if not approved.</p>
                         </div>
                         <div class="relative">
                            <div class="absolute -left-[26px] top-1 h-4 w-4 rounded-full bg-red-500"></div>
-                           <h4 class="font-semibold text-gray-800">Rule Blocked or Expires</h4>
-                           <p class="text-sm text-gray-600">Failure to get Congressional approval prevents rule implementation or renewal.</p>
+                           <h4 class="font-semibold text-gray-200">Rule Blocked or Expires</h4>
+                           <p class="text-sm text-gray-400">Failure to get Congressional approval prevents rule implementation or renewal.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Federal Employment -->
-                <div class="bg-white p-6 rounded-lg shadow-xl">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Federal Employment Transformed</h3>
-                    <p class="text-gray-600 mb-6">The bill overhauls the federal retirement system and introduces "at-will" employment, creating a two-tiered system for new hires.</p>
-                    <ul class="space-y-4 text-gray-700">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                    <h3 class="text-2xl font-bold text-gray-100 mb-4">Federal Employment Transformed</h3>
+                    <p class="text-gray-400 mb-6">The bill overhauls the federal retirement system and introduces "at-will" employment, creating a two-tiered system for new hires.</p>
+                    <ul class="space-y-4 text-gray-300">
                         <li class="flex items-start">
-                            <span class="text-orange-500 mr-3 mt-1">▲</span>
+                            <span class="text-orange-400 mr-3 mt-1">▲</span>
                             <div><strong>Increased FERS Contributions:</strong> Mandates significant, phased-in increases to retirement contributions for most federal employees, reducing take-home pay.</div>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-orange-500 mr-3 mt-1">▼</span>
+                            <span class="text-orange-400 mr-3 mt-1">▼</span>
                             <div><strong>"High-5" Pension Calculation:</strong> Changes the pension calculation from being based on the highest 3 years of salary to the highest 5, typically resulting in a lower pension.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-orange-500 mr-3 mt-1">↔️</span>
+                            <span class="text-orange-400 mr-3 mt-1">↔️</span>
                             <div><strong>At-Will Employment Option:</strong> New hires can choose "at-will" status (no appeal rights for removal) to avoid higher retirement contributions, fundamentally altering civil service protections.</div>
                         </li>
                     </ul>
@@ -404,6 +433,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    // Chart.js Global Defaults for Dark Theme
+    Chart.defaults.color = '#cbd5e1'; // slate-300 (general text color for charts)
+    Chart.defaults.borderColor = '#475569'; // slate-600 (axis lines, etc.)
+
 
     // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -457,18 +490,18 @@ document.addEventListener('DOMContentLoaded', () => {
             label: 'FY2025 Funding (in Billions)',
             data: [46.5, 45, 8, 14.4, 4.1],
             backgroundColor: [
-                'rgba(75, 192, 192, 0.6)',
-                'rgba(255, 99, 132, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(255, 206, 86, 0.6)',
-                'rgba(153, 102, 255, 0.6)'
+                'rgba(59, 130, 246, 0.8)',  // blue-500
+                'rgba(239, 68, 68, 0.8)',   // red-500
+                'rgba(16, 185, 129, 0.8)',  // emerald-500
+                'rgba(245, 158, 11, 0.8)',  // amber-500
+                'rgba(139, 92, 246, 0.8)'   // violet-500
             ],
             borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(153, 102, 255, 1)'
+                'rgba(59, 130, 246, 1)',
+                'rgba(239, 68, 68, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(139, 92, 246, 1)'
             ],
             borderWidth: 1
         }]
@@ -499,10 +532,21 @@ document.addEventListener('DOMContentLoaded', () => {
             scales: {
                 x: {
                     beginAtZero: true,
+                    grid: {
+                        color: '#334155' // slate-700 for grid lines
+                    },
+                    ticks: { color: '#94a3b8' /* slate-400 */ },
                     title: {
                         display: true,
-                        text: 'Funding in Billions (USD)'
+                        text: 'Funding in Billions (USD)',
+                        color: '#cbd5e1' // slate-300
                     }
+                },
+                y: {
+                     grid: {
+                        color: '#334155' // slate-700 for grid lines
+                    },
+                    ticks: { color: '#94a3b8' /* slate-400 */ }
                 }
             }
         }
@@ -521,9 +565,9 @@ document.addEventListener('DOMContentLoaded', () => {
     feesData.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.type}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.fee}</td>
-            <td class="px-6 py-4 whitespace-normal text-sm text-gray-500">${item.conditions}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">${item.type}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${item.fee}</td>
+            <td class="px-6 py-4 whitespace-normal text-sm text-gray-400">${item.conditions}</td>
         `;
         feesTableBody.appendChild(row);
     });
@@ -535,11 +579,11 @@ document.addEventListener('DOMContentLoaded', () => {
             label: 'Rescinded Funds (in Billions)',
             data: [27, 5, 5, 3, 2], // Example data based on analysis
             backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(255, 159, 64, 0.7)',
-                'rgba(255, 205, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
+                'rgba(239, 68, 68, 0.9)',   // red-500
+                'rgba(249, 115, 22, 0.9)',  // orange-500
+                'rgba(234, 179, 8, 0.9)',   // yellow-500
+                'rgba(34, 197, 94, 0.9)',  // green-500
+                'rgba(59, 130, 246, 0.9)',  // blue-500
             ],
         }]
     };
@@ -553,6 +597,9 @@ document.addEventListener('DOMContentLoaded', () => {
             plugins: {
                 legend: {
                     position: 'right',
+                    labels: {
+                        color: '#cbd5e1' // slate-300
+                    }
                 },
                 title: {
                     display: false
