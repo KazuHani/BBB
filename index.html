@@ -77,10 +77,27 @@
             max-height: 1000px; /* Adjust as needed */
             transition: max-height 0.7s ease-in;
         }
+        /* Styles for scroll-triggered animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Header scroll effect */
+        #header {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #header.scrolled {
+            background-color: rgba(15, 23, 42, 0.95); /* slate-900 with more opacity */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.25); /* Darker, more defined shadow */
+        }
     </style>
 </head>
 <body class="antialiased">
-
     <!-- Header & Navigation -->
     <header id="header" class="bg-slate-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,34 +140,34 @@
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
         <!-- Overview Section -->
-        <section id="overview" class="text-center mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">A Sweeping Legislative Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-lg text-gray-400 mb-10">
+        <section id="overview" class="text-center mb-16 md:mb-24 scroll-mt-20 ">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4 animate-on-scroll">A Sweeping Legislative Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-400 mb-10 animate-on-scroll" data-delay="100">
                 The "One Big Beautiful Bill Act" proposes a fundamental reorientation of federal policy. This interactive analysis breaks down its core pillars: fiscal austerity, deregulation, enhanced enforcement, and significant shifts in social and tax policy. Explore the key financial and regulatory changes reshaping America's landscape.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left animate-on-scroll" data-delay="200">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">💰</span>
                         <h3 class="text-xl font-bold text-gray-200">Fiscal Reshaping</h3>
                     </div>
                     <p class="text-gray-400">Massive spending increases in some areas (border security) and deep cuts in others (climate, environment), alongside a proliferation of new user fees.</p>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left animate-on-scroll" data-delay="300">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">⚖️</span>
                         <h3 class="text-xl font-bold text-gray-200">Regulatory Rollback</h3>
                     </div>
                     <p class="text-gray-400">Systematic dismantling of environmental regulations and reduced oversight for the financial services industry, shifting power from agencies to Congress.</p>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left animate-on-scroll" data-delay="400">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">🛡️</span>
                         <h3 class="text-xl font-bold text-gray-200">Enforcement First</h3>
                     </div>
                     <p class="text-gray-400">An unprecedented focus on immigration enforcement, with tens of billions allocated for detention, personnel, and a physical border barrier.</p>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl text-left animate-on-scroll" data-delay="500">
                     <div class="flex items-center mb-3">
                         <span class="text-3xl mr-3">📝</span>
                         <h3 class="text-xl font-bold text-gray-200">Tax & Social Policy</h3>
@@ -162,12 +179,12 @@
 
         <!-- Immigration Section -->
         <section id="immigration" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Immigration & Border Security Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4 animate-on-scroll">Immigration & Border Security Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12 animate-on-scroll" data-delay="100">
                 The bill allocates over $125 billion to reshape immigration enforcement and border security. This includes massive funding for a border wall, a dramatic increase in detention capacity and enforcement personnel, and a host of new, non-waivable fees for nearly every step of the immigration process.
             </p>
             
-            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12">
+            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12 animate-on-scroll" data-delay="200">
                 <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">New Appropriations for Enforcement & Infrastructure</h3>
                  <p class="text-center text-gray-400 mb-6">The bill directs tens of billions of dollars towards specific agencies for enforcement activities, with the largest shares going to border barrier construction and ICE detention capacity. Hover over the bars to see the exact funding allocated to each initiative.</p>
                 <div class="chart-container">
@@ -175,7 +192,7 @@
                 </div>
             </div>
             
-            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl">
+            <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl animate-on-scroll" data-delay="300">
                  <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">A New 'User-Pays' System: Major Immigration Fees</h3>
                  <p class="text-center text-gray-400 mb-8">The legislation introduces a sweeping range of new fees for immigration processes, many of which are explicitly non-waivable. This fundamentally alters the financial landscape for applicants. The table below details some of the most significant new fees proposed for fiscal year 2025.</p>
                  <div class="overflow-x-auto">
@@ -197,14 +214,14 @@
 
         <!-- Taxation Section -->
         <section id="taxation" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Taxation Overhaul</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4 animate-on-scroll">Taxation Overhaul</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12 animate-on-scroll" data-delay="100">
                 The bill makes permanent the individual and business tax cuts from the 2017 Tax Cuts and Jobs Act, while simultaneously introducing new, targeted tax relief measures and eliminating most clean energy tax credits. Click on any card to see more details about the proposed changes.
             </p>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Tax Cuts Made Permanent -->
-                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="tax-cuts-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer animate-on-scroll" data-target="tax-cuts-details" data-delay="200">
                     <div class="flex items-center mb-3">
                          <span class="text-2xl mr-3">📉</span>
                         <h3 class="text-xl font-bold text-gray-200">TCJA Tax Cuts Permanent</h3>
@@ -222,7 +239,7 @@
                 </div>
 
                 <!-- New Tax Relief -->
-                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="tax-relief-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer animate-on-scroll" data-target="tax-relief-details" data-delay="300">
                     <div class="flex items-center mb-3">
                         <span class="text-2xl mr-3">🎉</span>
                         <h3 class="text-xl font-bold text-gray-200">New Targeted Relief</h3>
@@ -239,7 +256,7 @@
                 </div>
                 
                 <!-- Elimination of Green Credits -->
-                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer" data-target="green-credits-details">
+                <div class="card bg-gray-800 p-6 rounded-lg shadow-2xl cursor-pointer animate-on-scroll" data-target="green-credits-details" data-delay="400">
                     <div class="flex items-center mb-3">
                         <span class="text-2xl mr-3">🍃</span>
                         <h3 class="text-xl font-bold text-gray-200">Green Credits Eliminated</h3>
@@ -259,13 +276,13 @@
         
         <!-- Healthcare & Social Safety Net Section -->
         <section id="healthcare" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Healthcare & Social Safety Net</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4 animate-on-scroll">Healthcare & Social Safety Net</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12 animate-on-scroll" data-delay="100">
                 This bill enacts significant reforms across Medicaid, the ACA, SNAP, and student loans. The overarching themes are stricter eligibility, increased work and community engagement requirements, enhanced program integrity measures, and the introduction of specific social policy limitations.
             </p>
 
             <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl animate-on-scroll" data-delay="200">
                     <h3 class="text-2xl font-bold text-gray-100 mb-4">Key Changes to Medicaid & SNAP</h3>
                     <ul class="space-y-4 text-gray-300">
                         <li class="flex items-start">
@@ -287,7 +304,7 @@
                     </ul>
                 </div>
 
-                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                 <div class="bg-gray-800 p-6 rounded-lg shadow-2xl animate-on-scroll" data-delay="300">
                     <h3 class="text-2xl font-bold text-gray-100 mb-4">Education & ACA Reforms</h3>
                     <ul class="space-y-4 text-gray-300">
                          <li class="flex items-start">
@@ -313,12 +330,12 @@
 
         <!-- Energy & Environment Section -->
         <section id="energy" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Energy & Environment Pivot</h2>
-            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4 animate-on-scroll">Energy & Environment Pivot</h2>
+            <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12 animate-on-scroll" data-delay="100">
                 The bill engineers a sharp pivot in U.S. energy policy, moving away from support for renewable energy and towards maximizing domestic fossil fuel production. It mandates new oil, gas, and coal leasing while systematically rescinding funds and repealing regulations related to climate change and environmental protection.
             </p>
 
-             <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12">
+             <div class="bg-gray-800 p-6 md:p-8 rounded-lg shadow-2xl mb-12 animate-on-scroll" data-delay="200">
                 <h3 class="text-2xl font-bold text-gray-100 mb-4 text-center">Rescinded Climate & Environmental Funds (IRA & Others)</h3>
                  <p class="text-center text-gray-400 mb-6">The bill rescinds billions in unobligated funds from programs established by the Inflation Reduction Act and other environmental laws. The chart below shows the breakdown of some major funding areas targeted for cuts.</p>
                 <div class="chart-container" style="max-height: 350px;">
@@ -327,7 +344,7 @@
             </div>
 
             <div class="grid lg:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-6 rounded-lg border border-green-600 shadow-2xl">
+                <div class="bg-gray-800 p-6 rounded-lg border border-green-600 shadow-2xl animate-on-scroll" data-delay="300">
                     <h3 class="text-2xl font-bold text-green-400 mb-4">Pro-Fossil Fuel Mandates</h3>
                      <ul class="space-y-3 text-green-500">
                         <li class="flex items-start">
@@ -348,7 +365,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="bg-gray-800 p-6 rounded-lg border border-red-600 shadow-2xl">
+                <div class="bg-gray-800 p-6 rounded-lg border border-red-600 shadow-2xl animate-on-scroll" data-delay="400">
                     <h3 class="text-2xl font-bold text-red-400 mb-4">Environmental Repeals</h3>
                      <ul class="space-y-3 text-red-500">
                         <li class="flex items-start">
@@ -374,14 +391,14 @@
 
         <!-- Governance Section -->
         <section id="governance" class="scroll-mt-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4">Reshaping Governance & Federal Work</h2>
-             <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-100 mb-4 animate-on-scroll">Reshaping Governance & Federal Work</h2>
+             <p class="max-w-3xl mx-auto text-center text-lg text-gray-400 mb-12 animate-on-scroll" data-delay="100">
                 The bill fundamentally alters the balance of power between Congress and federal agencies, while also transforming the nature of federal employment. It introduces new hurdles for regulation and restructures retirement and job protections for civil servants.
             </p>
 
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Regulatory Power Shift -->
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl animate-on-scroll" data-delay="200">
                     <h3 class="text-2xl font-bold text-gray-100 mb-4">Shift in Regulatory Power</h3>
                     <p class="text-gray-400 mb-6">New procedures are established to give Congress direct approval power over significant agency rules, slowing down the regulatory process.</p>
                     <div class="space-y-4 border-l-4 border-gray-600 pl-4">
@@ -409,7 +426,7 @@
                 </div>
 
                 <!-- Federal Employment -->
-                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-2xl animate-on-scroll" data-delay="300">
                     <h3 class="text-2xl font-bold text-gray-100 mb-4">Federal Employment Transformed</h3>
                     <p class="text-gray-400 mb-6">The bill overhauls the federal retirement system and introduces "at-will" employment, creating a two-tiered system for new hires.</p>
                     <ul class="space-y-4 text-gray-300">
@@ -443,6 +460,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu');
     mobileMenuButton.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) { // Adjust scroll threshold as needed
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
     });
 
     // Navigation scroll highlighting
@@ -481,6 +508,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const details = document.getElementById(targetId);
             details.classList.toggle('open');
         });
+    });
+
+    // Scroll-triggered animations for elements
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    const scrollObserverOptions = {
+        root: null, // use the viewport
+        threshold: 0.1, // trigger when 10% of the element is visible
+        // rootMargin: "0px 0px -50px 0px" // Optional: trigger a bit sooner
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.dataset.delay || '0';
+                entry.target.style.transitionDelay = `${delay}ms`;
+                entry.target.classList.add('is-visible');
+                // observer.unobserve(entry.target); // Optional: unobserve after animation
+            }
+        });
+    }, scrollObserverOptions);
+
+    animatedElements.forEach(el => {
+        scrollObserver.observe(el);
     });
 
     // Immigration Spending Chart
